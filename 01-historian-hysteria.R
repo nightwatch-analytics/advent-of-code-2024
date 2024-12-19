@@ -3,16 +3,15 @@ library(tidyverse)
 
 source(dir_ls("R"))
 
-locations <- map(dir_ls("data"), read_locID) %>%
+locations <- map(dir_ls("data/01"), read_locID) %>%
   list_rbind(names_to = "file") %>%
-  mutate(file = str_remove(file, pattern = "data/01-")) %>%
-  mutate(file = str_remove(file, pattern = "\\.csv")) %>%
+  mutate(file = str_extract(file, pattern = "list[0-9]+")) %>%
   pivot_wider(names_from = file,
               values_from = LocationID)
 # Distance ####
 
 distance_total <- locations %>%
-  mutate(distance = get_dist(list1, list2)) %>%
+  mutate(distance = get_dist(list01, list02)) %>%
   summarise(distance = sum(distance))
 
 # Similarity Score ####
