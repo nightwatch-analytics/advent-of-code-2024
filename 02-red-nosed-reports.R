@@ -1,10 +1,6 @@
 reports <- read_reports("data/02/reports")
 
-reports_checked <- reports %>%
-  calc_prog()
+reports %>%
+  vapply(check_reports, logical(1)) %>%
+  sum()
 
-%>%
-  check_reports()
-
-reports_checked %>%
-  count(rating)
