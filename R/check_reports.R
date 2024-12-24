@@ -1,14 +1,6 @@
 check_reports <- function(x) {
-  x %>%
-    group_by(id) %>%
-    mutate(rating_val = case_when(
-      (abs(prog) >= 1 & abs(prog) <= 3) & (all(prog > 0) | all(prog < 0)) ~ 0,
-      .default = 1
-      )
-    )%>%
-    summarise(total = sum(rating_val)) %>%
-    mutate(rating = case_when(
-      total == 0 ~ "safe",
-      .default = "unsafe"
-    ))
+  diffs <- diff(x)
+  cond1 <- all(diffs > 0) || all(diffs < 0)
+  cond2 <- all(abs(diffs) >= 1) && all(abs(diffs) <= 3)
+  cond1 && cond2
 }
